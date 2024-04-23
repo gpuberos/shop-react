@@ -3,11 +3,11 @@ import Footer from "./Footer";
 
 const index = ({children}) => {
     return (
-        <>
+        <div>
             <Header />
-                {children}
+            {children}
             <Footer/>
-        </>
+        </div>
     );
 };
 
