@@ -2,7 +2,7 @@ import Accueil from "./Accueil";
 
 const index = () => {
     return (
-        <div>
+        <div className="container-fluid">
             <Accueil/>
         </div>
     );
