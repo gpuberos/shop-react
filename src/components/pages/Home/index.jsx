@@ -1,7 +1,9 @@
+import Accueil from "./Accueil";
+
 const index = () => {
     return (
         <div>
-            
+            <Accueil/>
         </div>
     );
 };
