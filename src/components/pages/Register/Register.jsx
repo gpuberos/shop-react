@@ -1,193 +1,229 @@
+import { Navigate, Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { Navigate, Link } from "react-router-dom"
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
-    const UserRegex = /^[a-zA-Z][a-zA-Z0-9-]{3,23}$/;
-    const PasswordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@&#$%]).{8,23}$/;
-    const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const PhoneNumberRegex = /^\+(?:\d{1,3})?\d{10,14}$/;
+const UserRegex = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const PasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@&#$%]).{8,23}$/;
+const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const PhoneNumberRegex = /^\+(?:\d{1,3})?\d{10,14}$/;
 
 const Register = ({link, msg}) => {
-    
+
     const [user, setUser] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [msgErr, setMsgErr] = useState('')
 
-    const usernameRef = useRef();
-    const emailRef = useRef();
-    const phoneRef = useRef();
-    const passwordRef = useRef();
-    const confirmPasswordRef = useRef();
+    const [userName, setUserName] = useState('');
+    const [validName, setValidName] = useState(false);
+    const [userFocus, setUserFocus] = useState(false);
 
-    const [username, setUsername] = useState('');
-    const [isValidUsername, setIsValidUsername] = useState(false);
-    const [usernameFocus, setUsernameFocus] = useState(false);
-    
     const [email, setEmail] = useState('');
-    const [isValidEmail, setIsValidEmail] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
     const [emailFocus, setEmailFocus] = useState(false);
-    
+
     const [phone, setPhone] = useState('');
-    const [isValidPhone, setIsValidPhone] = useState(false);
+    const [validPhone, setValidPhone] = useState(false);
     const [phoneFocus, setPhoneFocus] = useState(false);
-    
-    const [password, setPassword] = useState('');
-    const [isValidPassword, setIsValidPassword] = useState(false);
-    const [passwordFocus, setPasswordFocus] = useState(false);
-    
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isValidConfirmPassword, setIsValidConfirmPassword] = useState(false);
-    const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
 
-    useEffect(() => {
-        usernameRef.current.focus();
-    }, []);
+    const [pwd, setPwd] = useState('');
+    const [validPwd, setValidPwd] = useState(false);
+    const [pwdFocus, setPwdFocus] = useState(false);
 
-    useEffect(() => {
-        setIsValidUsername(UserRegex.test(username));
-    }, [username])
+    const [matchPwd, setMatchPwd] = useState('');
+    const [validMatch, setValidMatch] = useState(false);
+    const [matchFocus, setMatchFocus] = useState(false);
 
-    useEffect(() => {
-        setIsValidEmail(EmailRegex.test(email));
-    }, [email])
+    const userRef = useRef()
 
-    useEffect(() => {
-        setIsValidPhone(PhoneNumberRegex.test(phone));
-    }, [phone])
+    useEffect(()=>{
+        userRef.current.focus();
+    },[])
 
-    useEffect(() => {
-        setIsValidPassword(PasswordRegex.test(password));
-    }, [password])
+    useEffect(()=>{
+        const result = UserRegex.test(userName);
+        setValidName(result);
+    },[userName])
 
-    useEffect(() => {
-        setIsValidConfirmPassword(password === confirmPassword);
-    }, [password, confirmPassword])
-    
-    // Pour pouvoir accès aux 3 états on met async : attente, validation et rejet
+    useEffect(()=>{
+        const result = EmailRegex.test(email);
+        setValidEmail(result);
+    },[email])
+
+    useEffect(()=>{
+        const result = PhoneNumberRegex.test(phone);
+        setValidPhone(result);
+    },[phone])
+
+    useEffect(()=>{
+        const result = PasswordRegex.test(pwd);
+        setValidPwd(result);
+        const match = pwd === matchPwd;
+        setValidMatch(match);
+    },[pwd, matchPwd])
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (isValidUsername && isValidEmail && isValidPhone && isValidPassword && isValidConfirmPassword) {
-            setUser(true);
+        e.preventDefault()
+        const verif = validName && validPwd && validEmail && validPhone && validMatch
+        if (verif) {
+            setSuccess(true)
+        } else {
+            setSuccess(false)
+            setMsgErr('Les informations saisies ne sont pas valide.')
         }
     }
 
-return (
-    <div className="card">
-        {user && <Navigate to="/account" replace={true} />}
-        <div className="card-body">
-            <h1 className="card-title">Inscription</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Nom d'utilisateur</label>
-                    <input
-                        type="text"
-                        ref={usernameRef}
-                        name="username"
-                        id="username"
-                        required
-                        autoComplete="off"
-                        className={!username ? "form-control" : isValidUsername ? "form-control is-valid" : "form-control is-invalid"}
-                        aria-invalid={isValidUsername?"false":"true"}
-                        onChange={(e) => setUsername(e.target.value)}
-                        onFocus={() => setUsernameFocus(true)}
-                        onBlur={()=>setUsernameFocus(false)}
-                    />
-                    <div id="userNameNote" className={usernameFocus && !isValidUsername ? "instructions mt-2 alert alert-warning" : "offscreen d-none"} role="alert">
-                        <FontAwesomeIcon icon={faInfoCircle}/>
-                        &nbsp;Doit contenir au moins 4 caractères et au plus 24 caractères. Ne peut commencer que par une lettre.
+    return (
+        <div className="card">
+            {user && <Navigate to="/account" replace={true} />}
+            <div className="card-body">
+                <h1 className="card-title">Inscription</h1>
+                <form onSubmit={handleSubmit} noValidate>
+                    <div className="form-floating">
+                        <input 
+                            type="text"
+                            id="userName"
+                            name="userName"
+                            autoComplete="off"
+                            placeholder="user123"
+                            required
+                            className={!userName ? "form-control" : validName ? "is-valid form-control" : "is-invalid form-control"}
+                            aria-invalid={!validName}
+                            ref={userRef}
+                            onChange={(e)=>setUserName(e.target.value)}
+                            onFocus={()=>setUserFocus(true)}
+                            onBlur={()=>setUserFocus(false)}
+                        />
+                        <label htmlFor="userName" className="form-label d-flex">Nom d'utilisateur : </label>
                     </div>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input
-                        type="email"
-                        ref={emailRef}
-                        name="email"
-                        id="email"
-                        required
-                        autoComplete="off"
-                        className={!email ? "form-control" : isValidEmail ? "form-control is-valid" : "form-control is-invalid"}
-                        aria-invalid={isValidEmail?"false":"true"}
-                        onChange={(e) => setEmail(e.target.value)}
-                        onFocus={() => setEmailFocus(true)}
-                        onBlur={()=> setEmailFocus(false)}
-                    />
-                    <div id="emailNote" className={emailFocus && !isValidEmail ? "instructions mt-2 alert alert-warning" : "offscreen d-none"} role="alert">
+                    <div 
+                        id="uidnote"
+                        className={userFocus && userName && !validName ? "instructions mt-2 alert alert-warning" : "offscreen d-none"}
+                        role="alert"
+                    >
                         <FontAwesomeIcon icon={faInfoCircle}/>
-                        &nbsp;Doit être un email valide.
-                    </div>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="phone" className="form-label">Numéro de téléphone</label>
-                    <input
-                        type="tel"
-                        ref={phoneRef}
-                        name="phone"
-                        required
-                        autoComplete="off"
-                        id="phone" className={!phone ? "form-control" : isValidPhone ? "form-control is-valid" : "form-control is-invalid"}
-                        onChange={(e) => {
-                            const newValue = e.target.value.replace(/^0/, '+33')
-                            setPhone(newValue)
-                        }}
-                        onFocus={() => setPhoneFocus(true)}
-                        onBlur={()=> setPhoneFocus(false)}
+                        &nbsp;Entre 4 et 24 caractères.<br/>
+                        Doit commencer par une lettre.<br/>
+                        Doit comporter au moins une lettre et aucun caractère spécial.
+                    </div>  
+                <div className="form-floating mt-2">
+                    <input 
+                    type="email"
+                    id="email"
+                    name="email"
+                    autoComplete="off"
+                    placeholder="example@mail.com"
+                    required
+                    className={!email ? "form-control" : validEmail ? "is-valid form-control" : "is-invalid form-control"}
+                    aria-invalid={!validEmail}
+                    onChange={(e)=>setEmail(e.target.value)}
+                    onFocus={()=>setEmailFocus(true)}
+                    onBlur={()=>setEmailFocus(false)}
                     />
-                    <div id="phoneNote" className={phoneFocus && !isValidPhone ? "instructions mt-2 alert alert-warning" : "offscreen d-none"} role="alert">
-                        <FontAwesomeIcon icon={faInfoCircle}/>
-                        &nbsp;Doit être un numéro de téléphone valide commençant par '+' suivi de l'indicatif du pays et du numéro de téléphone.
-                    </div>
+                    <label htmlFor="email" className="form-label d-flex">Adresse mail :
+                    </label>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Mot de passe</label>
-                    <input
+                <div 
+                    id="emailnote"
+                    className={emailFocus && email && !validEmail ? "instructions mt-2 alert alert-warning" : "offscreen d-none"}
+                    role="alert"
+                >
+                    <FontAwesomeIcon icon={faInfoCircle}/>
+                    &nbsp;L'adresse mail doit avoir le bon format.
+                </div> 
+                <div className="form-floating mt-2">
+                    <input 
+                    type="tel"
+                    id="tel"
+                    name="tel"
+                    autoComplete="off"
+                    placeholder="+33607080901"
+                    required
+                    className={!phone ? "form-control" : (validPhone ? "is-valid form-control" : "is-invalid form-control")}
+                    aria-invalid={validPhone?"false":"true"}
+                    onChange={(e)=>{
+                        const newValue = e.target.value.replace(/^0/, '+33');
+                        setPhone(newValue);
+                    }}
+                    onFocus={()=>setPhoneFocus(true)}
+                    onBlur={()=>setPhoneFocus(false)}
+                    />
+                    <label htmlFor="tel" className="form-label d-flex">Numéro de téléphone :
+                    </label>
+                </div>
+                <div 
+                    id="telnote"
+                    className={phoneFocus && phone && !validPhone ? "instructions mt-2 alert alert-warning" : "offscreen d-none"}
+                    role="alert"
+                >
+                    <FontAwesomeIcon icon={faInfoCircle}/>
+                    &nbsp;Le numéro de téléphone doit avoir le bon format.'.
+                </div> 
+                <div className="form-floating mt-2">
+                    <input 
                         type="password"
-                        ref={passwordRef}
-                        name="password"
                         id="password"
-                        required
+                        name="password"
                         autoComplete="off"
-                        className={!password ? "form-control" : isValidPassword ? "form-control is-valid" : "form-control is-invalid"}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onFocus={() => setPasswordFocus(true)}
-                        onBlur={()=> setPasswordFocus(false)}
+                        placeholder="P@s5word"
+                        required
+                        className={!pwd ? "form-control" : (validPwd ? "is-valid form-control" : "is-invalid form-control")}
+                        aria-invalid={validPwd?"false":"true"}
+                        onChange={(e)=>setPwd(e.target.value)}
+                        onFocus={()=>setPwdFocus(true)}
+                        onBlur={()=>setPwdFocus(false)}
                     />
-                    <div id="passwordNote" className={passwordFocus && !isValidPassword ? "instructions mt-2 alert alert-warning" : "offscreen d-none"} role="alert">
-                        <FontAwesomeIcon icon={faInfoCircle}/>
-                        &nbsp;Doit contenir au moins 8 caractères et au plus 24 caractères. Doit comporter au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.
-                    </div>
+                    <label htmlFor="password" className="form-label d-flex">Mot de passe :</label>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="confirmPassword" className="form-label">Confirmer le mot de passe</label>
-                    <input
-                        type="text"
-                        ref={confirmPasswordRef}
-                        name="confirmPassword"
+                <div 
+                    id="pwdnote"
+                    className={pwdFocus && !validPwd ? "instructions mt-2 alert alert-warning" : "offscreen d-none"}
+                    role="alert"
+                >
+                    <FontAwesomeIcon icon={faInfoCircle}/>
+                    &nbsp;Doit contenir au moins 8 caractères.<br/>
+                    Doit comporter au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.
+                </div>  
+                <div className="form-floating mt-2">
+                    <input 
+                        type="password"
                         id="confirmPassword"
-                        required
+                        name="confirmPassword"
                         autoComplete="off"
-                        className={!confirmPassword ? "form-control" : isValidConfirmPassword ? "form-control is-valid" : "form-control is-invalid"}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        onFocus={() => setConfirmPasswordFocus(true)}
-                        onBlur={()=> setConfirmPasswordFocus(false)}
+                        placeholder="P@s5word"
+                        required
+                        className={!matchPwd ? "form-control" : (validMatch ? "is-valid form-control" : "is-invalid form-control")}
+                        aria-invalid={validMatch?"false":"true"}
+                        onChange={(e)=>setMatchPwd(e.target.value)}
+                        onFocus={()=>setMatchFocus(true)}
+                        onBlur={()=>setMatchFocus(false)}
                     />
-                    <div id="confirmPasswordNote" className={confirmPasswordFocus && !isValidConfirmPassword ? "instructions mt-2 alert alert-warning" : "offscreen d-none"} role="alert">
-                        <FontAwesomeIcon icon={faInfoCircle}/>
-                        &nbsp;Doit correspondre au mot de passe saisi précédemment.
-                    </div>
+                    <label htmlFor="confirmPassword" className="form-label d-flex">Confirme mot de passe :
+                    </label>
                 </div>
+                <div 
+                    id="confirmnote"
+                    className={matchFocus && !validMatch ? "instructions mt-2 alert alert-warning" : "offscreen d-none"}
+                    role="alert"
+                >
+                    <FontAwesomeIcon icon={faInfoCircle}/>
+                    &nbsp;Les mots de passe doivent correspondre.
+                </div> 
                 <div className="d-flex justify-content-between">
                     <div className="my-4 form-text text-primary">
-                        <Link className="text-decoration-none" to={link}>{msg}</Link>
+                    <Link className="text-decoration-none" to={link}>{msg}</Link>
                     </div>
                     <div>
-                        <button type="submit" className="btn btn-primary btn-lg mt-2">Envoyer</button>
+                    <button type="submit" className="btn btn-primary btn-lg mt-2">Valider</button>
                     </div>
                 </div>
-            </form>
+                </form>
+                <div className={!success && msgErr ? "instructions mt-2 alert alert-danger" : "offscreen d-none"} role="alert">
+                    <FontAwesomeIcon icon={faInfoCircle}/> {msgErr}
+                </div>
         </div>
     </div>
-);
+    );
 };
 
 export default Register;
