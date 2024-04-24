@@ -84,6 +84,8 @@ return (
                         ref={usernameRef}
                         name="username"
                         id="username"
+                        required
+                        autoComplete="off"
                         className={!username ? "form-control" : isValidUsername ? "form-control is-valid" : "form-control is-invalid"}
                         aria-invalid={isValidUsername?"false":"true"}
                         onChange={(e) => setUsername(e.target.value)}
@@ -102,6 +104,8 @@ return (
                         ref={emailRef}
                         name="email"
                         id="email"
+                        required
+                        autoComplete="off"
                         className={!email ? "form-control" : isValidEmail ? "form-control is-valid" : "form-control is-invalid"}
                         aria-invalid={isValidEmail?"false":"true"}
                         onChange={(e) => setEmail(e.target.value)}
@@ -119,6 +123,8 @@ return (
                         type="tel"
                         ref={phoneRef}
                         name="phone"
+                        required
+                        autoComplete="off"
                         id="phone" className={!phone ? "form-control" : isValidPhone ? "form-control is-valid" : "form-control is-invalid"}
                         onChange={(e) => {
                             const newValue = e.target.value.replace(/^0/, '+33')
@@ -139,6 +145,8 @@ return (
                         ref={passwordRef}
                         name="password"
                         id="password"
+                        required
+                        autoComplete="off"
                         className={!password ? "form-control" : isValidPassword ? "form-control is-valid" : "form-control is-invalid"}
                         onChange={(e) => setPassword(e.target.value)}
                         onFocus={() => setPasswordFocus(true)}
@@ -156,6 +164,8 @@ return (
                         ref={confirmPasswordRef}
                         name="confirmPassword"
                         id="confirmPassword"
+                        required
+                        autoComplete="off"
                         className={!confirmPassword ? "form-control" : isValidConfirmPassword ? "form-control is-valid" : "form-control is-invalid"}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onFocus={() => setConfirmPasswordFocus(true)}
