@@ -86,7 +86,7 @@ return (
                         id="username"
                         className={!username ? "form-control" : isValidUsername ? "form-control is-valid" : "form-control is-invalid"}
                         aria-invalid={isValidUsername?"false":"true"}
-                        onChange={e => setUsername(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value)}
                         onFocus={() => setUsernameFocus(true)}
                         onBlur={()=>setUsernameFocus(false)}
                     />
@@ -104,7 +104,7 @@ return (
                         id="email"
                         className={!email ? "form-control" : isValidEmail ? "form-control is-valid" : "form-control is-invalid"}
                         aria-invalid={isValidEmail?"false":"true"}
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => setEmailFocus(true)}
                         onBlur={()=> setEmailFocus(false)}
                     />
@@ -120,7 +120,10 @@ return (
                         ref={phoneRef}
                         name="phone"
                         id="phone" className={!phone ? "form-control" : isValidPhone ? "form-control is-valid" : "form-control is-invalid"}
-                        onChange={e => setPhone(e.target.value)}
+                        onChange={(e) => {
+                            const newValue = e.target.value.replace(/^0/, '+33')
+                            setPhone(newValue)
+                        }}
                         onFocus={() => setPhoneFocus(true)}
                         onBlur={()=> setPhoneFocus(false)}
                     />
@@ -137,7 +140,7 @@ return (
                         name="password"
                         id="password"
                         className={!password ? "form-control" : isValidPassword ? "form-control is-valid" : "form-control is-invalid"}
-                        onChange={e => setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                         onFocus={() => setPasswordFocus(true)}
                         onBlur={()=> setPasswordFocus(false)}
                     />
@@ -154,7 +157,7 @@ return (
                         name="confirmPassword"
                         id="confirmPassword"
                         className={!confirmPassword ? "form-control" : isValidConfirmPassword ? "form-control is-valid" : "form-control is-invalid"}
-                        onChange={e => setConfirmPassword(e.target.value)}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                         onFocus={() => setConfirmPasswordFocus(true)}
                         onBlur={()=> setConfirmPasswordFocus(false)}
                     />
