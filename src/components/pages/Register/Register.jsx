@@ -67,24 +67,24 @@ const Register = ({link, msg}) => {
                 <h1 className="card-title">Inscription</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">Nom d'utilisateur</label>
-                        <input type="text" ref={usernameRef} name="username" className={username.length < 1 ? "form-control" : isValidUsername ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setUsername(e.target.value)} />
+                        <label htmlFor="username" className="form-label">Nom d'utilisateur</label>
+                        <input type="text" ref={usernameRef} name="username" id="username" className={username.length < 1 ? "form-control" : isValidUsername ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setUsername(e.target.value)} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input type="email" ref={emailRef} name="email" className={email.length < 1 ? "form-control" : isValidEmail ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setEmail(e.target.value)} />
+                        <label htmlFor="email" className="form-label">Email</label>
+                        <input type="email" ref={emailRef} name="email" id="email" className={email.length < 1 ? "form-control" : isValidEmail ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setEmail(e.target.value)} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Numéro de téléphone</label>
-                        <input type="tel" ref={phoneRef} name="phone" className={phone.length < 1 ? "form-control" : isValidPhone ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setPhone(e.target.value)} />
+                        <label htmlFor="phone" className="form-label">Numéro de téléphone</label>
+                        <input type="tel" ref={phoneRef} name="phone" id="phone" className={phone.length < 1 ? "form-control" : isValidPhone ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setPhone(e.target.value)} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Mot de passe</label>
-                        <input type="password" ref={passwordRef} name="password" className={password.length < 1 ? "form-control" : isValidPassword ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setPassword(e.target.value)} />
+                        <label htmlFor="password" className="form-label">Mot de passe</label>
+                        <input type="password" ref={passwordRef} name="password" id="password" className={password.length < 1 ? "form-control" : isValidPassword ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setPassword(e.target.value)} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Confirmer le mot de passe</label>
-                        <input type="text" ref={confirmPasswordRef} name="confirmPassword" className={confirmPassword.length < 1 ? "form-control" : isValidConfirmPassword ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setConfirmPassword(e.target.value)} />
+                        <label htmlFor="confirmPassword" className="form-label">Confirmer le mot de passe</label>
+                        <input type="text" ref={confirmPasswordRef} name="confirmPassword" id="confirmPassword" className={confirmPassword.length < 1 ? "form-control" : isValidConfirmPassword ? "form-control is-valid" : "form-control is-invalid"} onChange={e => setConfirmPassword(e.target.value)} />
                     </div>
                     <div className="d-flex justify-content-between">
                         <div className="my-4 form-text text-primary">
